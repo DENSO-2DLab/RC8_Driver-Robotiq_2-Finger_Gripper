@@ -1,4 +1,4 @@
-# RC8_Driver-Robotiq_2-Finger_Gripper
+# RC8 Driver - Robotiq 2-Finger Gripper
 RC8 Driver for the Robotiq 2 Finger Gripper
 
 ### Contents
