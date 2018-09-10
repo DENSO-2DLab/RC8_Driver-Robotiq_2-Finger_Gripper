@@ -1,0 +1,56 @@
+#include <PanelMain.h> raw
+#include "..\Dev\Robotiq.pcs"
+
+Dim option(2) As Integer
+
+Sub PB1_CLICKED()
+	Run Robotiq("Connect", option)
+	
+	Dim counter1 As Integer
+	
+	For counter1=0 To 2
+		option(counter1) = &h00
+	Next counter1
+End Sub
+
+Sub PB4_CLICKED()
+	Run Robotiq("Disconnect", option)
+End Sub
+
+Sub PB2_CLICKED()
+	option(0) = NB3.Value
+	option(1) = NB1.Value
+	option(2) = NB2.Value
+
+	Run Robotiq("Move", option)
+End Sub
+
+Sub FK1_CLICKED()
+	page_change ForceSensor
+End Sub
+#ifdef TP_DESIGNER
+'<<--TPDESIGNER_RESERVED-->>
+CAPTION=""
+BG=&H754E3A
+FG=&H000000
+TIMEOUT=2000
+TIMEOUTMODE=1
+RELEASEMODE=0
+PNLCCVER=232
+COLORTYPE=1
+FONTTYPE=1
+BORDERSTYLE=0
+CONTROLSORT=0
+add_widget 1,"PB1",20,40,150,40,&H000000,&HB0B0B0,0,3,1,"Connect",16,0,0,"Segoe UI";
+add_widget 2,"Label1",200,40,160,30,&H000000,&HB0B0B0,0,1,0,"Gripper Motion",16,0,"Segoe UI","",1,1;
+add_widget 1,"PB4",20,90,150,40,&H000000,&HB0B0B0,0,3,1,"Disconnect",16,0,0,"Segoe UI";
+add_widget 2,"Label2",20,150,100,30,&H000000,&HB0B0B0,0,1,0,"Speed",16,0,"Segoe UI","",1,1;
+add_widget 5,"NB1",130,150,60,30,&H000000,&HB0B0B0,0,3,0,"NB1",16,0,100,"Segoe UI";
+add_widget 2,"Label3",20,190,100,30,&H000000,&HB0B0B0,0,1,0,"Force",16,0,"Segoe UI","",1,1;
+add_widget 5,"NB2",130,190,60,30,&H000000,&HB0B0B0,0,3,0,"NB1",16,0,100,"Segoe UI";
+add_widget 1,"PB2",200,90,150,40,&H000000,&HB0B0B0,0,3,1,"Move",16,0,0,"Segoe UI";
+add_widget 2,"Label4",20,230,100,30,&H000000,&HB0B0B0,0,1,0,"Pos",16,0,"Segoe UI","",1,1;
+add_widget 5,"NB3",130,230,60,30,&H000000,&HB0B0B0,0,3,0,"NB1",16,0,0,"Segoe UI";
+add_widget 12,"FK1","FS Main",1;
+'<<--TPDESIGNER_RESERVED-->>
+#endif

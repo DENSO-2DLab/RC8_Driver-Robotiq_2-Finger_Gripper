@@ -1,0 +1,20 @@
+'!TITLE "Denso robot program"
+
+#Include "..\Dev\Robotiq.pcs"
+
+Sub Main
+	Dim opt(5) As Integer
+		
+	Call Robotiq("Disconnect", opt)
+	Call Robotiq("Connect", opt)
+
+	Delay 3000
+	
+	opt(0) = &hFF	'Pos
+	opt(1) = &hFF	'Speed
+	opt(2) = &hFF	'Force
+	Call Robotiq("Move", opt)
+
+	Call Robotiq("GripperStatus", opt)
+	
+End Sub

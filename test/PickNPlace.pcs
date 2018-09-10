@@ -1,0 +1,164 @@
+'!TITLE "PickNPlace"
+
+#Include "..\Dev\Robotiq.pcs"
+
+#Define Home 0
+#Define Pick 1
+#Define Place 2
+
+'Register Defines
+#Define FaultStatus &b00001111
+#Define IniStatus &b000000001
+#Define MotionStatus &b00110000
+
+'Gripper Close/Open Values 
+#Define Close &hFF
+#Define Open &h00
+
+'Gripper Force Values
+#Define MaxForce &hFF
+#Define PickForce &h0F
+#Define PlaceForce &hFF
+
+'Gripper Speed Value
+#Define MaxSpeed &hFF
+#Define PickSpeed &hFF
+#Define PlaceSpeed &hFF
+
+'Gripper Object Detection Values
+#Define FingersAtPos &b11000000
+#Define ObjectDetected &b10000000
+
+Dim Opt(5) As Integer	'Option Array (Necessary for Robotiq Function)
+
+Sub Main 
+	TakeArm  Keep = 0			'Takearm Semaphore
+	Dim error_flag As Integer	'Error Flag.
+	
+	Move P, @0 P[Home] 		'Move to Start Position
+	
+	error_flag = GripIni		'Connect to Robotiq
+
+	If error_flag <> -1 Then			'Exit Program if fault detected.
+		PrintMsg "Fault Encountered!" 
+		Call Robotiq("Disconnect", Opt)
+		Exit Sub						
+	End If
+
+	'Pick Part Section--------------------------------
+	Approach P, P[Pick], @P 70, Next	'Move to Pick Area with Next Statement
+	OpenGripper							'Open Gripper while moving to Pick Area Approach 
+	Move L, @E P[Pick]					'Move to Pick Part
+	PickPart							'Pick Part
+	Depart L, @P 70						'Depart from Pick Area
+	
+	'Place Part Section--------------------------------
+	Approach P, P[Place], @P 70	'Move to Place Area
+	Move L, @E P[Place]			'Move to Place Pace
+	PlacePart					'Release Part
+	Depart L, @P 70				'Depart from Place Area
+
+End Sub
+
+Function GripIni() As Integer
+
+	GripIni = -1 	'Initialize Return Variable	
+
+	Call Robotiq("Connect", opt)	'Connect Gripper
+
+	Do While(1)
+		Call Robotiq("GripperStatus", opt)	'Get Gripper Status
+
+		'Check if there are any Faults 
+		If(opt(2) AND FaultStatus) > 1 Then 
+			GripIni = opt(2)	'Send Fault Status. 
+			Exit Do
+		End If 
+
+		'Check that Gripper Has been set for activation gACT == 0x1
+		If (opt(0) AND IniStatus) = 1 Then
+			'Check That Activation Has been completed gSTA != 0x03
+			If (opt(0) AND MotionStatus) <> 1 Then
+				Exit Do	'Exit Loop
+			End If
+		Else
+
+		End If
+	Loop 
+End Function
+
+Function OpenGripper() As Integer 
+	
+	'Initialize Return Value
+	OpenGripper = -1
+
+	'Set Gripper Options
+	Opt(0) = Open	'Open Position
+	Opt(1) = MaxSpeed	'Full Speed
+	Opt(2) = MaxForce	'Max Force
+
+	Call Robotiq("Move", opt)	'Move Gripper
+
+	'Wait Until Gripper is Open
+	Do While(1)
+		Call Robotiq("GripperStatus", opt)	'Get Gripper Status
+
+		If (opt(0) AND FingersAtPos) Then
+			OpenGripper = 1
+			Exit Do
+		End If		
+	Loop 
+End Function
+
+Function PickPart() As Integer 
+	
+	'Initialize Return Value
+	PickPart = -1
+
+	'Set Gripper Options
+	Opt(0) = Close		'Close Gripper
+	Opt(1) = PickSpeed	'See Define Value @ Top Code
+	Opt(2) = PickForce	'See Define Value @ Top Code
+
+	Call Robotiq("Move", opt)	'Move Gripper
+
+	'Wait Until Gripper is Open
+	Do While(1)
+		Call Robotiq("gGTO", opt)	'Get Gripper Status
+
+		If (Opt(0) = &b1) Then 	'Gripper Stoped
+			Call Robotiq("gOBJ", Opt)
+			If (Opt(0) = &b11) Then
+				PrintMsg "Fingers at Requested Position"
+				Exit Do
+			End If
+			If (Opt(0) = &b10)	Then
+				PrintMsg "Object Picked"
+				Exit Do
+			End If 
+		End If
+	Loop 
+End Function
+
+Function PlacePart() As Integer 
+	
+	'Initialize Return Value
+	PlacePart = -1
+
+	'Set Gripper Options
+	Opt(0) = Open		'Close Gripper
+	Opt(1) = PlaceSpeed	'See Define Value @ Top Code
+	Opt(2) = PlaceForce	'See Define Value @ Top Code
+
+	Call Robotiq("Move", opt)	'Move Gripper
+
+	'Wait Until Gripper is Open
+	Do While(1)
+		Call Robotiq("GripperStatus", opt)	'Get Gripper Status
+
+		If (opt(0) AND FingersAtPos) Then
+			PrintMsg "Object Placed"
+			Exit Do
+		End If		
+	Loop 
+End Function
