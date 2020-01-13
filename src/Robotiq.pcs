@@ -5,25 +5,25 @@
 ' @file    Robotiq.pcs
 ' @brief   Robotiq 2Finger gripper via Modbus RTU
 ' @details https://github.com/DENSO-2DLab/RC8_Driver-Robotiq_2-Finger_Gripper
-' 
-' @version 1.0.0
-' @date    2015/07/20
+
+' @version 1.0.1
+' @date    2020/01/13
 ' @author  Carlos A. Lopez (DPAM - R&D)
-'
+
 ' Software License Agreement (MIT License)
-'
+
 ' @copyright Copyright (c) 2018 DENSO 2DLab
-'
+
 ' Permission is hereby granted, free of charge, to any person obtaining a copy
 ' of this software and associated documentation files (the "Software"), to deal
 ' in the Software without restriction, including without limitation the rights
 ' to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ' copies of the Software, and to permit persons to whom the Software is
 ' furnished to do so, subject to the following conditions:
-'
+
 ' The above copyright notice and this permission notice shall be included in
 ' all copies or substantial portions of the Software.
-'
+
 ' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ' IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ' FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,20 +34,20 @@
 '-------------------------------------------------------------------------------
 
 'GETING STARTED-----------------------------------------------------------------
-' Make sure to go over the setup guide in the following document prior to running 
-' this program. 
-' 
+' Make sure to go over the setup guide in the following document prior to running
+' this program.
+
 ' @doc	RC8_Robotiq_2-Finger85&140_EN.pdf
-'
-' Prior to using this driver make sure you have setup the client settings for 
+
+' Prior to using this driver make sure you have setup the client settings for
 ' the port you are using
-'
-' GoTo: [F6:Settings] -> [F5:Communication and Token] 
+
+' GoTo: [F6:Settings] -> [F5:Communication and Token]
 '         -> [F3: Data Communications]
-'
-' Select one of the serial ports and enter the number on the COM_PORT 
+
+' Select one of the serial ports and enter the number on the COM_PORT
 ' constant (Default #1).
-'
+
 ' Client Settings----------
 ' Baudrate:		115200
 ' Parity:		No Parity
@@ -60,7 +60,8 @@
 ' Header:		None
 ' ------------------------------------------------------------------------------
 
-#Define COM_PORT	1	'RC8 COM PORT (Set by User)
+#Define COM_PORT	1		'RC8 COM PORT (Set by User)
+#Define COM_TIMEOUT 10000	'Response TIMEOUT (10 seconds default)
 
 '-------------------ENCRIPTED---------------------------------------------------
 #Pragma encrypt(ON)
@@ -124,7 +125,7 @@ Rp9pL4Bdn30cne5ZDVcMq2VEVwiyFn86477oS0H9vo5QwAM=
 iMOJOFNHXRaQfKeALBmIGrWLwUcPeY8CysBPmaDE
 NkNhAf98mTe0/ufFoomuV0ffYYYesz6TlGHCOvxj
 emRuZKxEeztEVndKn1PUFqWuJcRfR8d9HngZonEc/lqTKNGptcp66NJ7tgux5ZY=
-oxbjHgEgzGs2hF0h4GukX3bnHsrd9uGG/1EVjJiTmJgukxKPY0clgtVowpEykvvRJrJ1RPxR+Q3Lnje0Hjr65g5UyCuJqGcGsXDJDp0=
+oxbjHgEgzGs2hF0h4GukX3bnHsrd9uGG/1EVjJiTmJgukxKPEThY7bENr7cSqsKidbhgTLgHrTbUmnqdfhr29xoR/XmyvWQTrD7oDsCLbYNGo7I=
 P2QHUGvHzB1ubmFHEnhXV/tcsHo1O0jQ1kLw9ako
 pPMm2y3h+Ol4+M/t3s71bagnb5Al49TfpcmVH/JA
 LaD3tmFr+l/zTzMfE8IxcnSiPYYjQcEthZ33xFm33fPAsoVHQPxJW5ABfaJPZzG8/05IQSkwwFbbT8rAJXGhkLDtkt++Z0cWOmWgg59F5iweDglDhTZSoEUEuj5ZFHs2hag19YVcYZRsR8LORcMegjLq04RfUWXkLlpXF7ztMm7fShOLwdquKiJ2XRFE7Xc7WP2mgBTXK194tpQYalBXP08PxpwcHjfIMx6+F9KfMb4D+XAHuDcbGZBtLRNByx8f1Q==
@@ -142,7 +143,7 @@ Bfri5YJo6DdCyS30lnQz4y/xOlyHpNOYpNmQkuw+
 0nFrI2bIH62ujkbFQOVoqJHN0i7T1w8OHiFFoh7G
 ESDw7a42N5aFV6Q4DhXCLAzohvAtceuQl7zDMDAW
 ioLQ9gQBW4/LGis2z2GIu7RnuN6cPhPfjaGfz3bLbX3aOPGQRloqdTcllmVb440=
-XGgsLYiRla0mmlXAd/7r1s0MsJdx7RTcLUShaeewe4R7j6dgil+Y3XdFmlBQRGc/429BfE1xaXvyG+D4fJdQbjqY3PNMlZXeOPLkeA==
+XGgsLYiRla0mmlXAd/7r1s0MsJdx7RTcLUShaeewe4R7j6dg+CDlshMg93ZwfF5MsGVUdAknPUDtH63RHLdcfy7d6aF3gJbLJbzFeB6kVTypYw==
 +/6l1OKjTCHJO6Sxh1EBunuWhX4p3uY9CjPM7+YC
 yHg1IzTFmkyD0GXdOPOL6hZxbrGi+o03wwXodx9H
 qlBZrSDqaUzNIO+Qenbp+ldv9433ldvQoTr0MW3r
